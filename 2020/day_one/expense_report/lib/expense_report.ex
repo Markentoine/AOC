@@ -29,17 +29,11 @@ defmodule ExpenseReport do
 
   # PRIVATE
 
-  def sum_up_to(x, y, lim) do
-    x + y == lim
-  end
+  defp sum_up_to(x, y, lim), do: x + y == lim
 
-  defp sum_up(x, y) do
-    x + y == 2020
-  end
+  defp sum_up(x, y), do: x + y == 2020
 
-  def find_matching_nums([]) do
-    []
-  end
+  def find_matching_nums([]), do: []
 
   def find_matching_nums([x | nums]) do
     case Enum.filter(nums, fn n -> sum_up(x, n) end) do
@@ -51,9 +45,7 @@ defmodule ExpenseReport do
     end
   end
 
-  def find_matching_nums_to([], _) do
-    []
-  end
+  def find_matching_nums_to([], _), do: []
 
   def find_matching_nums_to([x | nums], limit) do
     case Enum.filter(nums, fn n -> sum_up_to(x, n, limit) end) do
