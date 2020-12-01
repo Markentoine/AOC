@@ -15,4 +15,8 @@ defmodule DayOne do
   def hello do
     :world
   end
+
+  def what_floor(instructions) do
+
+  end
 end
