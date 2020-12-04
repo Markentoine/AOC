@@ -2,12 +2,26 @@ defmodule DayTwo do
   def solve_2_1 do
     "dimensions.txt"
     |> get_inputs()
-    |> Enum.reduce(0, &sum/2)
+    |> Enum.reduce(0, &paper_command/2)
+  end
+
+  def solve_2_2 do
+    "dimensions.txt"
+    |> get_inputs()
+    |> Enum.reduce(0, &ribbon_command/2)
   end
 
   # PRIVATE
 
-  defp sum(dims, total) do
+  defp ribbon_command(dims, total) do
+    [{l, _}, {w, _}, {h, _}] = Enum.map(dims, &Integer.parse/1)
+    [d1, d2, _] = [l, w, h] |> Enum.sort()
+    smallest_perimeter = 2 * d1 + 2 * d2
+    volume = l * w * h
+    total + smallest_perimeter + volume
+  end
+
+  defp paper_command(dims, total) do
     [{l, _}, {w, _}, {h, _}] = Enum.map(dims, &Integer.parse/1)
     s1 = l * w
     s2 = w * h
