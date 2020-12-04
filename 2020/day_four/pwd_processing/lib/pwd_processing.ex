@@ -56,8 +56,8 @@ defmodule PwdProcessing do
   end
 
   defp check_birth_year(passport) do
-    byr = passport.byr |> String.to_integer()
-    not (is_integer(byr) and (byr >= 1920 and byr <= 2002))
+    {byr, _} = passport.byr |> Integer.parse()
+    not (byr in 1920..2002)
   end
 
   defp check_issue_year(passport) do
