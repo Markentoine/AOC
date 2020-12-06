@@ -14,7 +14,7 @@ defmodule Inputs.GetInputs do
   def get_chars(filename) do
     filename
     |> read_lines()
-    |> String.split("")
+    |> String.split("", trim: true)
   end
 
   def split_line(line, boundary) do
