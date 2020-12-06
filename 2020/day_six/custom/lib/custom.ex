@@ -1,21 +1,22 @@
 defmodule Custom do
+  alias Inputs.GetInputs, as: Inputs
+
   def solve_6_1 do
-    "answers.txt"
-    |> get_groups_answers()
+    extract_inputs("answers.txt")
     |> Stream.map(fn group ->
       group
       |> Enum.map(fn str ->
         String.split(str, "", trim: true)
       end)
     end)
-    |> Stream.map(fn group -> group |> List.flatten() |> Enum.uniq() end)
-    |> Stream.map(fn group -> group |> Enum.count() end)
+    |> Stream.map(&List.flatten/1)
+    |> Stream.map(&Enum.uniq/1)
+    |> Stream.map(&Enum.count/1)
     |> Enum.sum()
   end
 
   def solve_6_2 do
-    "answers.txt"
-    |> get_groups_answers()
+    extract_inputs("answers.txt")
     |> Stream.map(fn group ->
       group
       |> Enum.map(fn str ->
@@ -26,6 +27,11 @@ defmodule Custom do
   end
 
   # PRIVATE
+  defp extract_inputs(filename) do
+    filename
+    |> Inputs.get_group_lines()
+    |> Stream.map(fn l -> Inputs.split_line(l, "\n") end)
+  end
 
   defp sum_common_values(list_of_groups) do
     list_of_groups
@@ -39,62 +45,24 @@ defmodule Custom do
     counter + Enum.count(first)
   end
 
-  defp count_common_elements([first | others] = group, counter) do
+  defp count_common_elements([first | others], counter) do
     current_count =
       first
       |> Enum.reduce(0, fn el, acc ->
         presence = others |> Enum.all?(fn o -> Enum.member?(o, el) end)
-
-        cond do
-          presence ->
-            acc + 1
-
-          true ->
-            acc
-        end
+        presence |> _?(acc + 1, acc)
       end)
 
     counter + current_count
   end
 
-  defp build_answers_files(raw) do
-    raw
-    |> Enum.reduce(fn line, acc ->
-      cond do
-        line == "" ->
-          acc <> "@@@"
+  defp _?(predicate, prop1, prop2) do
+    cond do
+      predicate ->
+        prop1
 
-        true ->
-          acc <> "//" <> line
-      end
-    end)
-    |> String.split("@@@")
-    |> Stream.map(&replace_/1)
-    |> Stream.map(&String.trim/1)
-    |> Stream.map(&split_on_space/1)
-    |> Enum.map(& &1)
-  end
-
-  defp replace_(str), do: str |> String.replace("//", " ")
-
-  defp split_on_space(str), do: str |> String.split(" ")
-
-  defp get_groups_answers(filename) do
-    filename
-    |> get_inputs()
-    |> build_answers_files()
-  end
-
-  defp get_inputs(filename) do
-    filename
-    |> get_path()
-    |> File.read!()
-    |> String.trim()
-    |> String.split("\n")
-  end
-
-  defp get_path(filename) do
-    filename
-    |> Path.expand(__DIR__)
+      true ->
+        prop2
+    end
   end
 end
