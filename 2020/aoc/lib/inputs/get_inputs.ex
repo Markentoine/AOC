@@ -13,8 +13,16 @@ defmodule Inputs.GetInputs do
     |> String.split("\n\n")
   end
 
+  def decompose_lines(lines) do
+    lines |> Enum.map(&get_chars/1)
+  end
+
+  def get_chars(line) do
+    line |> split_line("")
+  end
+
   def split_line(line, boundary) do
-    line |> String.split(boundary)
+    line |> String.split(boundary, trim: true)
   end
 
   # PRIVATE
