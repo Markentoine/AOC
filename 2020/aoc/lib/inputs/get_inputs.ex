@@ -27,7 +27,7 @@ defmodule Inputs.GetInputs do
 
   # PRIVATE
 
-  defp read_lines(filename) do
+  def read_lines(filename) do
     filename
     |> get_path()
     |> File.read!()
