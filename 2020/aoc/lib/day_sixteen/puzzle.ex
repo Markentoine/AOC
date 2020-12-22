@@ -55,22 +55,21 @@ defmodule DaySixteen.Puzzle do
           transpose([data.ticket | valid_tickets])
       end
 
-    possible_fields_indexed =
-      Enum.map(transpositions, fn tr ->
-        Enum.filter(data.fields, fn {_field, range} ->
-          Enum.all?(tr, fn el ->
-            Enum.member?(range, el)
-          end)
+    Enum.map(transpositions, fn tr ->
+      Enum.filter(data.fields, fn {_field, range} ->
+        Enum.all?(tr, fn el ->
+          Enum.member?(range, el)
         end)
       end)
-      |> Enum.map(fn l ->
-        Enum.map(l, fn {field_name, _range} ->
-          field_name
-        end)
+    end)
+    |> Enum.map(fn l ->
+      Enum.map(l, fn {field_name, _range} ->
+        field_name
       end)
-      |> Enum.with_index()
-      |> find_matching_field([])
-      |> compute_final_result(data.ticket)
+    end)
+    |> Enum.with_index()
+    |> find_matching_field([])
+    |> compute_final_result(data.ticket)
   end
 
   # PRIVATE
